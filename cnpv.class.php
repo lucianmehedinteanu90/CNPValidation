@@ -7,7 +7,7 @@
 class CNPV {
 
     /**
-     type integer
+     type string
      */
     public $error;
 
@@ -23,7 +23,7 @@ class CNPV {
     protected $cnp;
 
     /**
-     type string
+     type array
      */
     protected $counties = array(
         1 => "Alba",
@@ -76,7 +76,7 @@ class CNPV {
     );
 
     /**
-     *type styring
+     *type array
      */
     protected $months = array(
         1 => "Ianuarie",
@@ -94,7 +94,7 @@ class CNPV {
     );
 
     /**
-     * validation class
+     effective validation class
      */
     public function isCnpValid($cnp) {
        
@@ -143,47 +143,8 @@ class CNPV {
 		}
     }
    
-    /**
-     all info of the owner of the CNP
-     */
-    public function getAllOwnerInfo() {
-        return array(
-            "genre" => $this->getGenre(),
-            "year" => $this->getYear(),
-            "month" => $this->getMonth(),
-            "day" => $this->getDay(),
-            "county" => $this->getCounty(),
-            "rezident" => $this->getResidentInfo(),
-            "persoana_straina" => $this->getStrangerInfo()
-        );
-    }
-
-    /**
-    is the resident of RO 
-     */
-    public function getResidentInfo() {
-        return in_array($this->genre, array(7, 8)) ? 1 : 0;
-    }
-    /**
-    is the holder a stranger 
-     */
-    public function getStrangerInfo() {
-        return in_array($this->genre, array(7, 8, 9)) ? 1 : 0;
-    }
-
-     /**
-    gets the gendre M/F
-      */
-    public function getGenre() {
-        return array(
-            $this->genre,
-            in_array($this->genre, array(1, 3, 5, 7)) ? "m" : (
-                in_array($this->genre, array(2, 4, 6, 8)) ? "f" : "n/a"
-            )
-        );
-    }
-
-    /**
+   
+ /**
      returns the year based on the cnp input
      */
     public function getYear() {
@@ -196,6 +157,41 @@ class CNPV {
             ) .
             substr($this->cnp, 1, 2);
     }
+	
+    /**
+    is the resident of RO 
+     */
+    public function getResidentInfo() {
+        return in_array($this->genre, array(7, 8)) ? 1 : 0;
+    }
+    /**
+    is the holder a stranger 
+     */
+    public function getStrangerInfo() {
+        return in_array($this->genre, array(7, 8, 9)) ? 1 : 0;
+    }
+   /**
+     returns the county based on the cnp input
+     */
+    public function getCounty() {
+        return array (
+            $this->county,
+            $this->counties[$this->county]
+        );
+    }
+     /**
+    gets the gendre M/F
+      */
+    public function getGenre() {
+        return array(
+            $this->genre,
+            in_array($this->genre, array(1, 3, 5, 7)) ? "m" : (
+                in_array($this->genre, array(2, 4, 6, 8)) ? "f" : "n/a"
+            )
+        );
+    }
+
+   
 
     /**
      returns the month based on the cnp input
@@ -217,12 +213,17 @@ class CNPV {
     }
 
     /**
-     returns the county based on the cnp input
+     all info of the owner of the CNP
      */
-    public function getCounty() {
-        return array (
-            $this->county,
-            $this->counties[$this->county]
+    public function getAllOwnerInfo() {
+        return array(
+            "genre" => $this->getGenre(),
+            "year" => $this->getYear(),
+            "month" => $this->getMonth(),
+            "day" => $this->getDay(),
+            "county" => $this->getCounty(),
+            "rezident" => $this->getResidentInfo(),
+            "persoana_straina" => $this->getStrangerInfo()
         );
     }
 
